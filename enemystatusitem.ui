@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EnemyStatusItem</class>
+ <widget class="QWidget" name="EnemyStatusItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>457</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+	font-size: 14px;
+	font-weight: bold;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #F0F0F0, stop: 1 #77F0F0F0);
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    padding: 0 3px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #00888888, stop: 1 #00FFFFFF);
+}</string>
+     </property>
+     <property name="title">
+      <string>Название монстра</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="topMargin">
+       <number>14</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QProgressBar" name="hp">
+        <property name="styleSheet">
+         <string notr="true">QProgressBar {
+   border: 1px solid black;
+    border-radius: 0px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(182, 100, 130, 162), stop:1 rgba(250, 100, 100, 255));
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+QProgressBar::chunk {
+    background-color: #1111FF;
+    width: 20px;
+	margin-right: -1px;
+	border-radius: 0px;
+}</string>
+        </property>
+        <property name="value">
+         <number>80</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="textDirection">
+         <enum>QProgressBar::TopToBottom</enum>
+        </property>
+        <property name="format">
+         <string>HP: %v / %m</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QProgressBar" name="mana">
+        <property name="styleSheet">
+         <string notr="true">QProgressBar {
+border: 1px solid black;
+    border-radius: 0px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(130, 100, 182, 162), stop:1 rgba(100, 100, 250, 255));
+	color: #000000;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+QProgressBar::chunk {
+    background-color: #FFFF00;
+    width: 20px;
+	margin-right: -1px;
+	border-radius: 0px;
+}</string>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="format">
+         <string>MANA: %v / %m</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QListWidget" name="effectlist">
+        <property name="styleSheet">
+         <string notr="true">QListWidget {
+border: 0px solid grey;
+	background-color: qlineargradient(spread:pad, x1:0.0681818, y1:0.051, x2:0.602, y2:0.880682, stop:0.221591 rgba(250, 250, 250, 0), stop:0.954545 rgba(200, 200, 190, 3))
+}</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
