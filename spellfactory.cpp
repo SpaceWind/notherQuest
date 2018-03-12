@@ -1,4 +1,5 @@
 #include "spellfactory.h"
+#include <QDebug>
 
 SpellFactory::SpellFactory()
 {
@@ -8,6 +9,7 @@ SpellFactory::SpellFactory()
     types["WitsEnd"] = SPELL_TYPE_COMPLEX;
     types["WitsEndNuke"] = SPELL_TYPE_NUKE;
     types["WitsEndDebuff"] = SPELL_TYPE_BUFF;
+    currentID = 10;
 }
 
 int SpellFactory::createSpell(QString name, Character *c, int lvl)

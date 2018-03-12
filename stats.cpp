@@ -110,6 +110,8 @@ AutoAttack AutoAttack::makeAutoAttack(Character &a, Character &d)
         result.damage *= a.info.crtDamage();
         result.isCrit = true;
     }
+    else
+        result.isCrit = false;
     double resist = a.isMagicAutoAttack ?
                     d.info.armor() : d.info.mres();
     result.damage *= 1.0 - resist;

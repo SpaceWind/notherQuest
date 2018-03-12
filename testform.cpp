@@ -7,6 +7,13 @@ TestForm::TestForm(QWidget *parent) :
     ui(new Ui::TestForm)
 {
     ui->setupUi(this);
+    sf = new SpellFactory();
+    fightManager = new FightManager(sf, 0);
+
+    QObject::connect(fightManager, &FightManager::message, [this](QString msg){
+        ui->textEdit->append(msg);
+    });
+
 }
 
 TestForm::~TestForm()
@@ -54,11 +61,28 @@ void TestForm::initCharacters()
     cha.reset();
     chb.reset();
 
+    cha.id = 1;
+    chb.id = 2;
+
     cha.name = ui->name_1->text();
     chb.name = ui->name_2->text();
     cha.isMagicAutoAttack = ui->md_1->isChecked();
     chb.isMagicAutoAttack = ui->md_2->isChecked();
     isFirst = cha.stats.speed > chb.stats.speed;
+
+    cha.resetPrepared();
+    chb.resetPrepared();
+
+    initSpells();
+}
+
+void TestForm::initSpells()
+{
+    static bool d = false;
+    if (!d) d = true;
+    else   return;
+    cha.actives.activeSpells.append(sf->createSpell("CutStrike", &cha, 1));
+    chb.actives.activeSpells.append(sf->createSpell("HybridStrike", &chb, 1));
 }
 
 QString TestForm::fightStep()
@@ -113,6 +137,21 @@ void TestForm::on_pushButton_clicked()
     ui->hpbar_1->setValue(cha.currentHP);
     ui->hpbar_->setValue(chb.currentHP);
     ui->textEdit->clear();
+
+    fightManager->addPlayer(&cha);
+    fightManager->addEnemy(&chb);
+
+    fightManager->startFight();
+
+    while (cha.alive() && chb.alive())
+        fightManager->startTurn();
+    if (cha.alive())
+        ui->textEdit->append("победил " + cha.name);
+    else
+        ui->textEdit->append("победил " + chb.name);
+    fightManager->clear();
+    sf->resetCD(sf->findSpell("CutStrike", cha.id));
+    sf->resetCD(sf->findSpell("HybridStrike", chb.id));
 }
 
 void TestForm::on_pushButton_2_clicked()

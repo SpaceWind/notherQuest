@@ -31,6 +31,7 @@ struct Spell
     int manacost, cd;
     double currentCD;
     bool selfCast;
+    double health;
 };
 
 struct Nuke : public Spell
@@ -61,7 +62,6 @@ struct Buff : public Spell
     virtual void apply(Character *receiver) = 0;
     virtual bool isActive() { bool alive = health != 0; health--; return alive; }
 protected:
-    int health;
 };
 
 struct Launcher : public Spell
@@ -93,8 +93,6 @@ struct Launcher : public Spell
     virtual Result afterReceiveAutoAttack(const AutoAttack &aa, Character *sender) { return Result::emptyResult(); }
     virtual Result onFightStart() { return Result::emptyResult(); }
     virtual Result onFightEnd(bool win) { return Result::emptyResult(); }
-protected:
-    int health;
 };
 
 struct Augmentation : public Spell

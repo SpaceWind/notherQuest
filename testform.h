@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "stats.h"
 #include "utils.h"
+#include "fightmanager.h"
 
 namespace Ui {
 class TestForm;
@@ -18,6 +19,7 @@ public:
     ~TestForm();
 
     void initCharacters();
+    void initSpells();
     QString fightStep();
 
 private slots:
@@ -34,6 +36,8 @@ private:
 
     Character cha, chb;
     bool isFirst;
+    SpellFactory *sf;
+    FightManager *fightManager;
 };
 
 #endif // TESTFORM_H

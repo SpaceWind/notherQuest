@@ -15,6 +15,7 @@ Magic::Spell::Spell(const QString &name, const QString &title, int id, Character
     this->currentCD = 0;
     this->cd = 0;
     this->selfCast = false;
+    this->health = 0;
 }
 
 double Magic::Spell::step(int time)
@@ -22,6 +23,10 @@ double Magic::Spell::step(int time)
     currentCD -= double(time)/5.0;
     if (currentCD < 0.0)
         currentCD = 0.0;
+    if (health > 0)
+        health -= double(time)/5.0;
+    if (health < 0)
+        health = 0;
     return currentCD;
 }
 

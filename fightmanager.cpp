@@ -24,20 +24,30 @@ void FightManager::startTurn()
     for (int i = 0; i < enemyTeam.count(); i++)
         applyTurn(enemyTeam[i]);
 
+    FightCycleResult result;
+    while (!result.done())
+        result = runFightCycle();
+}
+
+FightManager::FightCycleResult FightManager::runFightCycle()
+{
+    FightCycleResult result;
     Character *c = pickNext();
     if (c == 0)
     {
-        emit message("Ход закончен");
-        return;
+        result.turnEnded = true;
+        return result;
     }
 
     bool isPlayerTurn = playerTeam.contains(c);
 
-    Character *e = findEnemy(OFFENSIVE, !isPlayerTurn);
+    Character *e = findEnemy(OFFENSIVE, isPlayerTurn);
     if (e == 0)
     {
         emit message("Бой закончился. Победил " + c->name);
-        return;
+        result.playerWon = isPlayerTurn;
+        result.enemyWon = !isPlayerTurn;
+        return result;
     }
 
     bool wantsToCastSpell = StaticMethods::procChance(1.0 - c->preparedInfo.speciality());
@@ -53,9 +63,12 @@ void FightManager::startTurn()
                     Nuke *s = sf->getNuke(sId);
                     if (s->manacost <= c->currentMana)
                     {
-                        emit message(c->name + " кастует " + s->name);
+                        emit message(c->name + " кастует " + s->title);
                         c->currentMana-= s->manacost;
-                        applyNuke(c, s->id, s->launch(e), e);
+                        if (s->selfCast)
+                            applyNuke(c, s->id, s->launch(c), c);
+                        else
+                            applyNuke(c, s->id, s->launch(e), e);
                         wasCasted = true;
                         break;
                     }
@@ -67,7 +80,27 @@ void FightManager::startTurn()
                     {
                         emit message(c->name + " кастует " + s->name);
                         c->currentMana-= s->manacost;
-                        c->passives.buffs.append(s->id);
+                        if (s->selfCast)
+                            c->passives.buffs.append(sf->generic(sId));
+                        else
+                            e->passives.buffs.append(sf->generic(sId));
+                        wasCasted = true;
+                        break;
+                    }
+                }
+                else if (type == SPELL_TYPE_LAUNCHER)
+                {
+                    Launcher *s = sf->getLauncher(sId);
+                    if (s->manacost <= c->currentMana)
+                    {
+                        emit message (c->name + " кастует" + s->name);
+                        c->currentMana -= s->manacost;
+                        if (s->selfCast)
+                            c->passives.launchers.append(sf->generic(sId));
+                        else
+                            e->passives.launchers.append(sf->generic(sId));
+                        wasCasted = true;
+                        break;
                     }
                 }
             }
@@ -75,10 +108,27 @@ void FightManager::startTurn()
     if (!wasCasted)
     {
         AutoAttack aa = AutoAttack::makeAutoAttack(*c, *e);
+
+        QString msg;
+        if (!aa.missed)
+        {
+            if (!aa.isCrit)
+                msg = c->name + " наносит " + QString::number(aa.damage, 'f', 3) + " урона  по " + e->name + "!\n";
+            else
+                msg = c->name + " УЕБАЛ " + QString::number(aa.damage, 'f', 3) + " урона  по " + e->name + "!\n";
+
+            if (aa.isDefenderDead)
+                msg += e->name + "умирает. " + c->name + " победил";
+        }
+        else
+            msg = c->name + " промахнулся!";
+        message(msg);
+
+
         foreach (const int &id, c->passives.launchers)
             applyLauncher(sf->getLauncher(id)->beforeAttack(aa, e));
         foreach (const int &id, e->passives.launchers)
-            applyLauncher(sf->getLauncher(id)->beforeAttack(aa, e));
+            applyLauncher(sf->getLauncher(id)->beforeReceiveAutoAttack(aa, c));
 
         if (!aa.missed)
         {
@@ -86,12 +136,12 @@ void FightManager::startTurn()
             if (e->currentHP < 0)
                 e->currentHP = 0;
         }
-        else
-        {
-            emit message(c->name + " промахнулся");
-        }
+        foreach (const int &id, c->passives.launchers)
+            applyLauncher(sf->getLauncher(id)->afterAttack(aa, e));
+        foreach (const int &id, e->passives.launchers)
+            applyLauncher(sf->getLauncher(id)->afterReceiveAutoAttack(aa, c));
     }
-
+    return result;
 }
 
 Character *FightManager::pickNext()
@@ -104,7 +154,8 @@ Character *FightManager::pickNext()
         auto c = playerTeam[i];
         if (c->currentInit >= maxInit && c->alive())
         {
-            if ((c != 0 && c->info.init < r->info.init) || c == 0)
+            if ((r != 0 && c->currentInit == r->currentInit && c->info.init < r->info.init) ||
+                 c->currentInit > maxInit)
             {
                 maxInit = c->currentInit;
                 r = c;
@@ -116,7 +167,8 @@ Character *FightManager::pickNext()
         auto c = enemyTeam[i];
         if (c->currentInit >= maxInit && c->alive())
         {
-            if ((c != 0 && c->info.init < r->info.init) || c == 0)
+            if ((r != 0 && c->currentInit == r->currentInit && c->info.init < r->info.init) ||
+                 c->currentInit > maxInit)
             {
                 maxInit = c->currentInit;
                 r = c;
@@ -215,9 +267,9 @@ void FightManager::applyFightStart(Character *c)
     {
         QString type = sf->getTypeById(passiveId);
         if (type == SPELL_TYPE_BUFF)
-            c->passives.buffs.append(passiveId);
+            c->passives.buffs.append(sf->generic(passiveId));
         else if (type == SPELL_TYPE_LAUNCHER)
-            c->passives.launchers.append(passiveId);
+            c->passives.launchers.append(sf->generic(passiveId));
     }
     foreach (const int buffId, c->passives.buffs)
     {
@@ -241,7 +293,7 @@ void FightManager::applyTurn(Character *c)
         Buff *b = sf->getBuff(buffId);
         if (!b->isActive())
         {
-            //sf->removeSpell(buffId);
+            sf->removeSpell(buffId);
             bRemoveList.append(buffId);
             continue;
         }
@@ -254,7 +306,7 @@ void FightManager::applyTurn(Character *c)
         Launcher *l = sf->getLauncher(launcherId);
         if (!l->isActive())
         {
-            //sf->removeSpell(l->id);
+            sf->removeSpell(l->id);
             lremoveIds.append(launcherId);
             continue;
         }
@@ -266,6 +318,12 @@ void FightManager::applyTurn(Character *c)
     foreach (const int &i, bRemoveList)
         c->passives.buffs.removeOne(i);
 
+    foreach (const int buffId, c->passives.buffs)
+        sf->update(buffId, 5.0);
+    foreach (const int launcherId, c->passives.launchers)
+        sf->update(launcherId, 5.0);
+    foreach (const int spId, c->actives.activeSpells)
+        sf->update(spId, 5.0);
 }
 
 void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Character *c)
@@ -282,8 +340,14 @@ void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Cha
         double mres = 1.0 - c->preparedInfo.mres(),
                armor= 1.0 - c->preparedInfo.armor();
 
+        double value =  r.physDamage*armor + r.magicDamage*mres + r.trueDamage;
+
         c->currentMana -= r.manaDamage;
-        c->currentHP-= r.physDamage*armor + r.magicDamage*mres + r.trueDamage;
+        c->currentHP-= value;
+        if (r.manaDamage > 0)
+            emit message("сжигает " + QString::number(r.manaDamage, 'f',2) + " маны");
+
+        emit message("наносит " + QString::number(value, 'f', 2) + " урона");
 
         if (c->currentMana < 0.) c->currentMana = 0.;
         if (c->currentHP < 0.) c->currentHP = 0.;
@@ -305,14 +369,14 @@ void FightManager::applyLauncher(Launcher::Result r)
         int sId = sf->createSpell(r.spellName,findById(r.ownerID), r.lvl);
         QString type = sf->getTypeById(sId);
         if (type == SPELL_TYPE_BUFF)
-            findById(r.receiverID)->passives.buffs.append(sId);
+            findById(r.receiverID)->passives.buffs.append(sf->generic(sId));
         else if (type == SPELL_TYPE_NUKE)
         {
             Nuke *n = sf->getNuke(sId);
             applyNuke(findById(r.ownerID), n->id, n->launch(findById(r.receiverID)), findById(r.receiverID));
         }
         else if (type == SPELL_TYPE_LAUNCHER)
-            findById(r.receiverID)->passives.launchers.append(sId);
+            findById(r.receiverID)->passives.launchers.append(sf->generic(sId));
     }
 }
 

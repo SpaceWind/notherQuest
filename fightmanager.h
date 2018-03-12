@@ -13,13 +13,25 @@ class FightManager : public QObject
 public:
     FightManager(SpellFactory *sf, QObject *o);
 
-    void addPlayer(Character *c);
-    void addEnemy(Character *c);
+    void addPlayer(Character *c) { playerTeam.append(c); }
+    void addEnemy(Character *c)  { enemyTeam.append(c); }
 
     void startFight();
     void startTurn();
+    void clear() {playerTeam.clear(); enemyTeam.clear();}
     
     enum CharSearchRule {FIRST, LAST, RANDOM, OFFENSIVE, WEAK};
+    struct FightCycleResult
+    {
+        FightCycleResult() {turnEnded = playerWon = enemyWon = false;}
+        ~FightCycleResult() {}
+        bool done() {return turnEnded || playerWon || enemyWon;}
+        bool turnEnded;
+        bool playerWon;
+        bool enemyWon;
+    };
+
+    FightCycleResult runFightCycle();
 
 signals:
     void message(QString s);
