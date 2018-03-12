@@ -352,7 +352,7 @@ void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Cha
         if (c->currentMana < 0.) c->currentMana = 0.;
         if (c->currentHP < 0.) c->currentHP = 0.;
     }
-    sf->resetCD(spellId);
+    sf->makeReady(spellId);
 
     foreach (const int &sid, c->passives.launchers)
     {

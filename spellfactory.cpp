@@ -161,6 +161,11 @@ void SpellFactory::resetCD(int id)
     spells[id]->currentCD = spells[id]->cd;
 }
 
+void SpellFactory::makeReady(int id)
+{
+    spells[id]->currentCD = 0;
+}
+
 bool SpellFactory::isReady(int id)
 {
     if (spells.contains(id))

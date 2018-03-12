@@ -26,6 +26,7 @@ public:
 
     double update(int id, double time);
     void resetCD(int id);
+    void makeReady(int id);
     bool isReady(int id);
     bool isActive(int id);
 
