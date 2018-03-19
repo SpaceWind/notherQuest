@@ -14,6 +14,7 @@ TARGET = notherQuest
 TEMPLATE = app
 
 include(spells/spells.pri)
+include(artifacts/artifacts.pri)
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -26,7 +27,8 @@ SOURCES += main.cpp\
     spellfactory.cpp \
     fightmanager.cpp \
     questtimer.cpp \
-    artifact.cpp
+    artifact.cpp \
+    artifactfabric.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -38,7 +40,8 @@ HEADERS  += mainwindow.h \
     spellfactory.h \
     fightmanager.h \
     questtimer.h \
-    artifact.h
+    artifact.h \
+    artifactfabric.h
 
 FORMS    += mainwindow.ui \
     testform.ui \

@@ -3,10 +3,12 @@ HEADERS += \
     $$PWD/hybridstrike.h \
     $$PWD/witsend.h \
     $$PWD/atomization.h \
-    $$PWD/allspells.h
+    $$PWD/allspells.h \
+    $$PWD/weapondeathpostfix.h
 
 SOURCES += \
     $$PWD/cutstrike.cpp \
     $$PWD/hybridstrike.cpp \
     $$PWD/witsend.cpp \
-    $$PWD/atomization.cpp
+    $$PWD/atomization.cpp \
+    $$PWD/weapondeathpostfix.cpp

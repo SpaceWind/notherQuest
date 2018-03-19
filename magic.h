@@ -61,14 +61,14 @@ struct Buff : public Spell
     virtual ~Buff () { }
 
     virtual void apply(Character *receiver) = 0;
-    virtual bool isActive() { bool alive = health != 0; health--; return alive; }
+    virtual bool isActive();
 protected:
 };
 
 struct Launcher : public Spell
 {
     Launcher() : Spell() {}
-    Launcher (const Character *owner, int lvl);
+    Launcher (Character *owner, int lvl);
     virtual ~Launcher () { }
 
     struct Result
@@ -82,7 +82,7 @@ struct Launcher : public Spell
         QString spellName;
     };
 
-    virtual bool isActive() { bool alive = health != 0; health--; return alive; }
+    virtual bool isActive();
     virtual Result beforeTurn(){ return Result::emptyResult(); }
     virtual Result onTurn() { return Result::emptyResult(); }
     virtual Result beforeAttack(AutoAttack &aa, Character *receiver) { return Result::emptyResult(); }

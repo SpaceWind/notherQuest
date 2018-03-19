@@ -42,6 +42,14 @@ Magic::Buff::Buff(Character *owner, int lvl)
 
 }
 
+bool Magic::Buff::isActive()
+{
+    bool alive = health != 0;
+    if (alive)
+        health--;
+    return alive;
+}
+
 Magic::Launcher::Result Magic::Launcher::Result::emptyResult()
 {
     Result result;
@@ -64,4 +72,18 @@ Magic::Complex::Complex(Character *owner, int lvl)
 void Magic::Complex::addSpell(int spellId)
 {
     spells.append(spellId);
+}
+
+Magic::Launcher::Launcher(Character *owner, int lvl)
+    : Spell("", "", 0, owner, lvl)
+{
+
+}
+
+bool Magic::Launcher::isActive()
+{
+    bool alive = health != 0;
+    if (alive)
+        health--;
+    return alive;
 }
