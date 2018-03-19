@@ -106,50 +106,6 @@ void TestForm::initSpells()
     chb.actives.activeSpells.append(sf->createSpell("HybridStrike", &chb, 1));
 }
 
-QString TestForm::fightStep()
-{
-    AutoAttack aa;
-    QString aname, bname;
-    QString message;
-    if (isFirst)
-    {
-        aa = AutoAttack::makeAutoAttack(cha, chb);
-        aname = cha.name.toUpper();
-        bname = chb.name.toUpper();
-    }
-    else
-    {
-        aa = AutoAttack::makeAutoAttack(chb, cha);
-        aname = chb.name.toUpper();
-        bname = cha.name.toUpper();
-    }
-
-
-    if (!aa.missed)
-    {
-        if (!aa.isCrit)
-            message = aname + " наносит " + QString::number(aa.damage, 'f', 3) + " урона  по " + bname + "!\n";
-        else
-            message = aname + " УЕБАЛ " + QString::number(aa.damage, 'f', 3) + " урона  по " + bname + "!\n";
-
-        if (aa.isDefenderDead)
-            message += bname + "умирает. " + aname + " победил";
-    }
-    else
-        message = aname + " промахнулся!";
-
-    if (isFirst)
-        chb.currentHP -= aa.damage - aa.enemyHealed;
-    else
-        cha.currentHP -= aa.damage - aa.enemyHealed;
-
-    ui->hpbar_1->setValue(cha.currentHP);
-    ui->hpbar_->setValue(chb.currentHP);
-
-    isFirst = !isFirst;
-    return message;
-}
-
 void TestForm::progress(double v)
 {
     ui->quest_timer->setMaximum(1000);
@@ -193,19 +149,7 @@ void TestForm::on_pushButton_clicked()
     invokeAddPlayer(&cha);
     invokeAddEnemy(&chb);
     invokeStartFight();
-
     invokeStartTurn();
-    /*
-
-    while (cha.alive() && chb.alive())
-        fightManager->startTurn();
-    if (cha.alive())
-        ui->textEdit->append("победил " + cha.name);
-    else
-        ui->textEdit->append("победил " + chb.name);
-    fightManager->clear();
-    sf->makeReady(sf->findSpell("CutStrike", cha.id));
-    sf->makeReady(sf->findSpell("HybridStrike", chb.id));*/
 }
 
 void TestForm::on_pushButton_3_clicked()
