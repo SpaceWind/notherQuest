@@ -47,7 +47,7 @@ private:
     Character* findById(int id);
 
     void awaitTimer();
-    void runMessage(QString s, double time = 5.0);
+    void runMessage(QString s, double time = 5.0, bool animation = true);
     
     void applyFightStart(Character *c);
     void applyTurn(Character *c);

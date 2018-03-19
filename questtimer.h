@@ -18,7 +18,7 @@ signals:
 
 public slots:
     bool isReady();
-    void start(double time = 5.0);
+    void start(double time = 5.0, bool animation = true);
 
     void update();
 
@@ -26,6 +26,7 @@ private:
     QElapsedTimer elapsed;
     QTimer *timer;
     double time;
+    bool noAnimation;
 };
 
 #endif // QUESTTIMER_H

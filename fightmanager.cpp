@@ -281,7 +281,7 @@ void FightManager::awaitTimer()
     }
 }
 
-void FightManager::runMessage(QString s, double time)
+void FightManager::runMessage(QString s, double time, bool animation)
 {
     message(s);
     invokeStartQt(time);
