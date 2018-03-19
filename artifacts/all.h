@@ -1,7 +1,7 @@
 #ifndef ALL_H
 #define ALL_H
 
-#include "badstick.h"
-#include "weaponpostfixdeath.h"
+#include "base.h"
+#include "postfix.h"
 
 #endif // ALL_H

@@ -1,10 +1,10 @@
 HEADERS += \
-    $$PWD/badstick.h \
-    $$PWD/weaponpostfixdeath.h \
-    $$PWD/all.h
+    $$PWD/all.h \
+    $$PWD/base.h \
+    $$PWD/postfix.h
     
 
 SOURCES += \
-    $$PWD/badstick.cpp \
-    $$PWD/weaponpostfixdeath.cpp
+    $$PWD/base.cpp \
+    $$PWD/postfix.cpp
     

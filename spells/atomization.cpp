@@ -13,6 +13,7 @@ Nuke::Result Atomization::launch(const Character *receiver)
     if (!isReady())
         return result;
     result.physDamage = damage + 0.1*receiver->currentHP + 50*owner->preparedInfo.spellDamage() + owner->preparedInfo.damage;
+    result.isActive = true;
     return result;
 }
 

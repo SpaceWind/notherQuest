@@ -1,4 +1,4 @@
-#include "weapondeathpostfix.h"
+#include "weaponpostfixdeath.h"
 
 WeaponPostfixDeathSpell::WeaponPostfixDeathSpell()
     : Launcher()

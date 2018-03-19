@@ -1,8 +1,8 @@
-#include "weaponpostfixdeath.h"
+#include "postfix.h"
 #include <spells/allspells.h>
 
 WeaponPostfixDeath::WeaponPostfixDeath()
-    : Artifact ()
+    : Artefact ()
 {
     slot = WEAPON;
     type = POSTFIX;
@@ -12,7 +12,7 @@ WeaponPostfixDeath::WeaponPostfixDeath()
 }
 
 WeaponPostfixDeath::WeaponPostfixDeath(SpellFactory *sf, Character *c, int lvl, int id)
-    : Artifact(sf, c, lvl, id)
+    : Artefact(sf, c, lvl, id)
 {
     slot = WEAPON;
     type = POSTFIX;

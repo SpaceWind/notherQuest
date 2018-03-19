@@ -4,24 +4,24 @@
 #include "spellfactory.h"
 #include <QList>
 
-class Artifact
+class Artefact
 {
 public:
-    Artifact();
-    Artifact(SpellFactory *sf, Character *c, int lvl, int id);
-    virtual ~Artifact() { }
-    enum ArtifactSlot{HEAD, SHOWLDERS, BODY, ARMS, LEGS, FEET, AMULET, LEFT_RING, RIGHT_RING, WEAPON};
+    Artefact();
+    Artefact(SpellFactory *sf, Character *c, int lvl, int id);
+    virtual ~Artefact() { }
+    enum ArtefactSlot{HEAD, SHOWLDERS, BODY, ARMS, LEGS, FEET, AMULET, LEFT_RING, RIGHT_RING, WEAPON};
     enum Rarity {COMMON, UNCOMMON, RARE, MYTHICAL, LEGENDARY};
     enum Type {BASE, PREFIX, POSTFIX};
 
-    void setPrefix(Artifact *a) {prefix = a;}
-    void setPostfix(Artifact *a) {postfix = a;}
-    void setRarity(Artifact::Rarity r) {rarity = r;}
+    void setPrefix(Artefact *a) {prefix = a;}
+    void setPostfix(Artefact *a) {postfix = a;}
+    void setRarity(Artefact::Rarity r) {rarity = r;}
 
-    Artifact::ArtifactSlot getSlot() { return slot; }
+    Artefact::ArtefactSlot getSlot() { return slot; }
     int getLvl() { return lvl; }
 
-    virtual void init() = 0;
+    virtual void init();
     virtual void apply() = 0;
 
     virtual double getPrice();
@@ -35,11 +35,11 @@ protected:
     Character * owner;
     SpellFactory *sf;
 
-    Artifact *prefix;
-    Artifact *postfix;
+    Artefact *prefix;
+    Artefact *postfix;
     QList<int> spells;
 
-    ArtifactSlot slot;
+    ArtefactSlot slot;
     Rarity rarity;
     Type type;
 };

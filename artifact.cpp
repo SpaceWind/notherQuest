@@ -1,6 +1,6 @@
 #include "artifact.h"
 
-Artifact::Artifact()
+Artefact::Artefact()
 {
     owner = 0;
     lvl = 0;
@@ -11,7 +11,7 @@ Artifact::Artifact()
     sf = 0;
 }
 
-Artifact::Artifact(SpellFactory *sf, Character *c, int lvl, int id)
+Artefact::Artefact(SpellFactory *sf, Character *c, int lvl, int id)
 {
     owner = c;
     this->lvl = lvl;
@@ -22,7 +22,13 @@ Artifact::Artifact(SpellFactory *sf, Character *c, int lvl, int id)
     this->sf = sf;
 }
 
-double Artifact::getPrice()
+void Artefact::init()
+{
+    if (prefix)     prefix->init();
+    if (postfix)    postfix->init();
+}
+
+double Artefact::getPrice()
 {
     double result = price;
     if (prefix)

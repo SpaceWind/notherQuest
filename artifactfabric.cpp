@@ -14,12 +14,12 @@ void ArtifactFabric::init()
     levels["WeaponPostfixDeath"] = ArtifactLvl();
 
     //QHash<QString, Artifact::ArtifactSlot> artSlots;
-    artSlots["BadStick"] = Artifact::WEAPON;
-    artSlots["WeaponPostfixDeath"] = Artifact::WEAPON;
+    artSlots["BadStick"] = Artefact::WEAPON;
+    artSlots["WeaponPostfixDeath"] = Artefact::WEAPON;
 
     //QHash<QString, Artifact::Rarity> artRarity;
-    artRarity["BadStick"] = Artifact::COMMON;
-    artRarity["WeaponPostfixDeath"] = Artifact::RARE;
+    artRarity["BadStick"] = Artefact::COMMON;
+    artRarity["WeaponPostfixDeath"] = Artefact::RARE;
 
     //QHash<Artifact::ArtifactSlot, QHash<Artifact::Type, QList<QString> > > items;
     QList<QString> weaponBase;
@@ -27,27 +27,27 @@ void ArtifactFabric::init()
     QList<QString> weaponPostfix;
     weaponPostfix << "WeaponPostfixDeath";
 
-    items[Artifact::WEAPON][Artifact::BASE] = weaponBase;
-    items[Artifact::WEAPON][Artifact::POSTFIX] = weaponPostfix;
+    items[Artefact::WEAPON][Artefact::BASE] = weaponBase;
+    items[Artefact::WEAPON][Artefact::POSTFIX] = weaponPostfix;
 
 }
 
-QString ArtifactFabric::findBase(Artifact::ArtifactSlot slot, int lvl, QList<Artifact::Rarity> rarity)
+QString ArtifactFabric::findBase(Artefact::ArtefactSlot slot, int lvl, QList<Artefact::Rarity> rarity)
 {
-    return findItem(slot, lvl, Artifact::BASE, rarity);
+    return findItem(slot, lvl, Artefact::BASE, rarity);
 }
 
-QString ArtifactFabric::findPrefix(Artifact::ArtifactSlot slot, int lvl, QList<Artifact::Rarity> rarity)
+QString ArtifactFabric::findPrefix(Artefact::ArtefactSlot slot, int lvl, QList<Artefact::Rarity> rarity)
 {
-    return findItem(slot, lvl, Artifact::PREFIX, rarity);
+    return findItem(slot, lvl, Artefact::PREFIX, rarity);
 }
 
-QString ArtifactFabric::findPostfix(Artifact::ArtifactSlot slot, int lvl, QList<Artifact::Rarity> rarity)
+QString ArtifactFabric::findPostfix(Artefact::ArtefactSlot slot, int lvl, QList<Artefact::Rarity> rarity)
 {
-    return findItem(slot, lvl, Artifact::POSTFIX, rarity);
+    return findItem(slot, lvl, Artefact::POSTFIX, rarity);
 }
 
-QString ArtifactFabric::findItem(Artifact::ArtifactSlot slot, int lvl, Artifact::Type type, QList<Artifact::Rarity> rarity)
+QString ArtifactFabric::findItem(Artefact::ArtefactSlot slot, int lvl, Artefact::Type type, QList<Artefact::Rarity> rarity)
 {
     QList<QString> result;
     foreach (const QString &s, items[slot][type])
@@ -58,7 +58,7 @@ QString ArtifactFabric::findItem(Artifact::ArtifactSlot slot, int lvl, Artifact:
     return result[qrand()%result.count()];
 }
 
-Artifact *ArtifactFabric::getArtifact(QString name, int lvl, Character*c)
+Artefact *ArtifactFabric::getArtifact(QString name, int lvl, Character*c)
 {
     if (name == "BadStick")
         return new BadStick(sf, c, lvl, currentId++);
@@ -67,34 +67,34 @@ Artifact *ArtifactFabric::getArtifact(QString name, int lvl, Character*c)
     return 0;
 }
 
-Artifact *ArtifactFabric::generateBase(int minLvl, int maxLvl, QList<Artifact::ArtifactSlot> slot, QList<Artifact::Rarity> rarity, Character *c)
+Artefact *ArtifactFabric::generateBase(int minLvl, int maxLvl, QList<Artefact::ArtefactSlot> slot, QList<Artefact::Rarity> rarity, Character *c)
 {
     int lvl = qrand()%(maxLvl-minLvl) + minLvl;
     if (slot.isEmpty())
-        slot << Artifact::WEAPON;
+        slot << Artefact::WEAPON;
     int slotIndex = qrand()%slot.count();
 
     QString name = findBase(slot[slotIndex], lvl, rarity);
     return getArtifact(name, lvl, c);
 }
 
-Artifact *ArtifactFabric::generatePrefix(Artifact::ArtifactSlot slot, int lvl, Character *c)
+Artefact *ArtifactFabric::generatePrefix(Artefact::ArtefactSlot slot, int lvl, Character *c)
 {
     QString name = findPrefix(slot, lvl);
     return getArtifact(name, lvl, c);
 }
 
-Artifact *ArtifactFabric::generatePostfix(Artifact::ArtifactSlot slot, int lvl, Character *c)
+Artefact *ArtifactFabric::generatePostfix(Artefact::ArtefactSlot slot, int lvl, Character *c)
 {
     QString name = findPostfix(slot, lvl);
     return getArtifact(name, lvl,c);
 }
 
-Artifact *ArtifactFabric::generate(bool isSpecial, int minLvl, int maxLvl, Character *c)
+Artefact *ArtifactFabric::generate(bool isSpecial, int minLvl, int maxLvl, Character *c)
 {
-    Artifact * base = generateBase(minLvl, maxLvl,
-                                   QList<Artifact::ArtifactSlot>(),
-                                   QList<Artifact::Rarity>() << Artifact::COMMON,c);
+    Artefact * base = generateBase(minLvl, maxLvl,
+                                   QList<Artefact::ArtefactSlot>(),
+                                   QList<Artefact::Rarity>() << Artefact::COMMON,c);
     if (!isSpecial)
         return base;
 
@@ -115,22 +115,22 @@ Artifact *ArtifactFabric::generate(bool isSpecial, int minLvl, int maxLvl, Chara
     if (uniqueInstead)
     {
         delete base;
-        return generateBase(minLvl, maxLvl, QList<Artifact::ArtifactSlot>(), QList<Artifact::Rarity>() << Artifact::LEGENDARY, c);
+        return generateBase(minLvl, maxLvl, QList<Artefact::ArtefactSlot>(), QList<Artefact::Rarity>() << Artefact::LEGENDARY, c);
     }
 
     if (needPrefix)
     {
-        Artifact *prefix = generatePrefix(base->getSlot(), base->getLvl(), c);
+        Artefact *prefix = generatePrefix(base->getSlot(), base->getLvl(), c);
         base->setPrefix(prefix);
-        base->setRarity(Artifact::UNCOMMON);
+        base->setRarity(Artefact::UNCOMMON);
     }
     if (needPostfix)
     {
-        Artifact *postfix = generatePostfix(base->getSlot(), base->getLvl(), c);
+        Artefact *postfix = generatePostfix(base->getSlot(), base->getLvl(), c);
         base->setPostfix(postfix);
-        base->setRarity(Artifact::RARE);
+        base->setRarity(Artefact::RARE);
     }
     if (needPrefix && needPostfix)
-        base->setRarity(Artifact::MYTHICAL);
+        base->setRarity(Artefact::MYTHICAL);
     return base;
 }

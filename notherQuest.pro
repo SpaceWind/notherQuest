@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     fightmanager.cpp \
     questtimer.cpp \
     artifact.cpp \
-    artifactfabric.cpp
+    artifactfabric.cpp \
+    stashitem.cpp \
+    globalinfo.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -41,7 +43,9 @@ HEADERS  += mainwindow.h \
     fightmanager.h \
     questtimer.h \
     artifact.h \
-    artifactfabric.h
+    artifactfabric.h \
+    stashitem.h \
+    globalinfo.h
 
 FORMS    += mainwindow.ui \
     testform.ui \

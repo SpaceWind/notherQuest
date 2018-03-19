@@ -1,7 +1,7 @@
-#include "badstick.h"
+#include "base.h"
 
 BadStick::BadStick()
-    : Artifact()
+    : Artefact()
 {
     slot = WEAPON;
     type = BASE;
@@ -11,7 +11,7 @@ BadStick::BadStick()
 }
 
 BadStick::BadStick(SpellFactory *sf, Character *c, int lvl, int id)
-    : Artifact(sf, c, lvl, id)
+    : Artefact(sf, c, lvl, id)
 {
     slot = WEAPON;
     type = BASE;
@@ -19,12 +19,6 @@ BadStick::BadStick(SpellFactory *sf, Character *c, int lvl, int id)
     price = 10 + 1*lvl;
     name = "BadStick";
     title = "Дряхлая палка";
-}
-
-void BadStick::init()
-{
-    if (prefix)     prefix->init();
-    if (postfix)    postfix->init();
 }
 
 void BadStick::apply()

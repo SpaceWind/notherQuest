@@ -5,6 +5,6 @@
 #include "cutstrike.h"
 #include "hybridstrike.h"
 #include "witsend.h"
-#include "weapondeathpostfix.h"
+#include "weaponpostfixdeath.h"
 
 #endif // ALLSPELLS_H
