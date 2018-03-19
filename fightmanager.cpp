@@ -9,7 +9,7 @@ FightManager::FightManager(SpellFactory *sf, QuestTimer *q, QObject *o)
 {
     this->sf = sf;
     this->qt = q;
-    connect(this, SIGNAL(invokeStartQt(double)), qt, SLOT(start(double)));
+    connect(this, SIGNAL(invokeStartQt(double,bool)), qt, SLOT(start(double,bool)));
 }
 
 void FightManager::startFight()
@@ -18,13 +18,13 @@ void FightManager::startFight()
         applyFightStart(playerTeam[i]);
     for (int i = 0; i < enemyTeam.count(); i++)
         applyFightStart(enemyTeam[i]);
-    runMessage("БИТВА НАЧАЛАСЬ", 3.0);
+    runMessage("БИТВА НАЧАЛАСЬ", 3.0, false);
     turnNumber = 1;
 }
 
 void FightManager::startTurn()
 {
-    runMessage("Ход " + QString::number(turnNumber++), 2.0);
+    runMessage("Ход " + QString::number(turnNumber++), 2.0, false);
     updateInit();
     for (int i = 0; i < playerTeam.count(); i++)
         applyTurn(playerTeam[i]);
@@ -56,7 +56,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
     Character *e = findEnemy(OFFENSIVE, isPlayerTurn);
     if (e == 0)
     {
-        runMessage("Бой закончился. Победил " + c->name);
+        runMessage("Бой закончился. Победил " + c->name, false);
         result.playerWon = isPlayerTurn;
         result.enemyWon = !isPlayerTurn;
         return result;
@@ -284,7 +284,7 @@ void FightManager::awaitTimer()
 void FightManager::runMessage(QString s, double time, bool animation)
 {
     message(s);
-    invokeStartQt(time);
+    invokeStartQt(time, animation);
     this->thread()->sleep(1);
     awaitTimer();
 }
@@ -378,9 +378,9 @@ void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Cha
         c->currentMana -= r.manaDamage;
         c->currentHP-= value;
         if (r.manaDamage > 0)
-            runMessage("сжигает " + QString::number(r.manaDamage, 'f',2) + " маны", 3.0);
+            runMessage("сжигает " + QString::number(r.manaDamage, 'f',2) + " маны", 3.0, false);
 
-        runMessage("наносит " + QString::number(value, 'f', 2) + " урона", 3.0);
+        runMessage("наносит " + QString::number(value, 'f', 2) + " урона", 3.0, false);
 
         if (c->currentMana < 0.) c->currentMana = 0.;
         if (c->currentHP < 0.) c->currentHP = 0.;

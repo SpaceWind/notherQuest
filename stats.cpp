@@ -41,8 +41,8 @@ StatsInfo StatsInfo::buildInfo(Stats stats)
 {
 
     StatsInfo info;
-    info.damage = stats.strength * 4.5 + stats.agility *1.0;
-    info.crc = stats.agility * 2.0;
+    info.damage = stats.strength * 5.0 + stats.agility *1.0;
+    info.crc = stats.agility * 1.5;
     info.crd = stats.agility * 3.0 + stats.strength *1.0;
     info.arm = stats.agility * 1.0 + stats.endurance * 3.5;
     info.mr = stats.endurance * 2.0 + stats.charisma *0.5 + stats.intellect *0.5;
@@ -66,7 +66,7 @@ StatsInfo StatsInfo::buildInfo(Stats stats)
 double StatsInfo::speciality()
 {
     double pS, mS, nS;
-    pS = damage * 182. + crc*400. + crd*200.;
+    pS = damage * 182. + crc*666. + crd*200.;
     mS = sd * 125. + (mana-50.) * 100. + (mpr - 0.05)*200000.;
     nS = (arm * 222. + mr * 333. + (hp - 100.)*42. + (hpr - 0.5) * 10000. + eq*666. + init * 6666.)*0.66;
 
@@ -105,20 +105,20 @@ void Character::resetPrepared()
 AutoAttack AutoAttack::makeAutoAttack(Character &a, Character &d)
 {
     AutoAttack result;
-    result.damage = a.info.damage;
+    result.damage = a.preparedInfo.damage;
 
-    if (StaticMethods::procChance(a.info.crtChance()))
+    if (StaticMethods::procChance(a.preparedInfo.crtChance()))
     {
-        result.damage *= a.info.crtDamage();
+        result.damage *= a.preparedInfo.crtDamage();
         result.isCrit = true;
     }
     else
         result.isCrit = false;
     double resist = a.isMagicAutoAttack ?
-                    d.info.armor() : d.info.mres();
+                    d.preparedInfo.armor() : d.preparedInfo.mres();
     result.damage *= 1.0 - resist;
 
-    if (StaticMethods::procChance(d.info.evasion()))
+    if (StaticMethods::procChance(d.preparedInfo.evasion() * (1.0 - a.preparedInfo.evasion()/2.0)))
     {
         result.missed = true;
         result.isDefenderDead = false;

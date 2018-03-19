@@ -37,7 +37,7 @@ public slots:
 
 signals:
     void message(QString s);
-    void invokeStartQt(double time);
+    void invokeStartQt(double time, bool animation);
     void nextTurn();
     void fightEnded(bool playerWon);
 private:
