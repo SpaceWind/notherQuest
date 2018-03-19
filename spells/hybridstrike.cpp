@@ -4,6 +4,22 @@ HybridStrike::HybridStrike(Character *owner, int lvl)
     : Nuke (owner, lvl)
 {
     this->name = "HybridStrike";
+    updateLvl(lvl);
+}
+
+Nuke::Result HybridStrike::launch(const Character *receiver)
+{
+    Nuke::Result result;
+    if (!isReady())
+        return result;
+    result.isActive = true;
+    result.magicDamage = damage + 40*owner->preparedInfo.spellDamage() + 1.0*owner->preparedInfo.damage;
+    return result;
+}
+
+void HybridStrike::updateLvl(int lvl)
+{
+    this->lvl = lvl;
     this->title = "Гибридный удар " + QString::number(lvl) +"го уровня";
     switch (lvl)
     {
@@ -35,14 +51,4 @@ HybridStrike::HybridStrike(Character *owner, int lvl)
     default:
         break;
     }
-}
-
-Nuke::Result HybridStrike::launch(const Character *receiver)
-{
-    Nuke::Result result;
-    if (!isReady())
-        return result;
-    result.isActive = true;
-    result.magicDamage = damage + 40*owner->preparedInfo.spellDamage() + 1.0*owner->preparedInfo.damage;
-    return result;
 }

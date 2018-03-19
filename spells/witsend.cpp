@@ -1,11 +1,27 @@
 #include "witsend.h"
 
-//Damage: 0/50/100/150/200 + 100SQF
 WitsEndNuke::WitsEndNuke(Character *owner, int lvl)
     : Nuke(owner, lvl)
 {
     name = "WitsEndNuke";
     currentCD = 0;
+    updateLvl(lvl);
+}
+
+Nuke::Result WitsEndNuke::launch(const Character *receiver)
+{
+    Nuke::Result result;
+    if (!isReady())
+        return result;
+    result.isActive = true;
+    result.magicDamage = damage + 100*owner->preparedInfo.spellDamage();
+    return result;
+}
+
+void WitsEndNuke::updateLvl(int lvl)
+{
+    this->lvl = lvl;
+    this->title = "Распыление (удар) " + QString::number(lvl) +"го уровня";
     cd = 0;
     manacost = 0;
 
@@ -31,29 +47,25 @@ WitsEndNuke::WitsEndNuke(Character *owner, int lvl)
     }
 }
 
-Nuke::Result WitsEndNuke::launch(const Character *receiver)
-{
-    Nuke::Result result;
-    if (!isReady())
-        return result;
-    result.isActive = true;
-    result.magicDamage = damage + 100*owner->preparedInfo.spellDamage();
-    return result;
-}
-
 WitsEndDebuff::WitsEndDebuff(Character *owner, int lvl)
     : Buff(owner, lvl)
 {
     name = "WitsEndDebuff";
-    title = "Смерть разума " + QString::number(lvl);
-    health = -1;
-    manacost = 0;
-    value = 15 + 10*(lvl-1);
+    updateLvl(lvl);
 }
 
 void WitsEndDebuff::apply(Character *receiver)
 {
     receiver->preparedInfo.mr -= value;
+}
+
+void WitsEndDebuff::updateLvl(int lvl)
+{
+    this->lvl = lvl;
+    title = "Смерть разума " + QString::number(lvl);
+    health = -1;
+    manacost = 0;
+    value = 15 + 10*(lvl-1);
 }
 
 WitsEnd::WitsEnd(Character *owner, int lvl)

@@ -20,8 +20,9 @@ struct Spell
     Spell (const QString &name, const QString &title, int id, Character *owner, int lvl);
     virtual ~Spell() {}
 
-    bool isReady() {return currentCD <= 0.0;}
-    double step(int time);
+    virtual bool isReady() {return currentCD <= 0.0;}
+    virtual double step(int time);
+    virtual void updateLvl(int lvl) { this->lvl = lvl; }
 
     QString name;
     QString title;

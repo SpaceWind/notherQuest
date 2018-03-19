@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     magic.cpp \
     spellfactory.cpp \
     fightmanager.cpp \
-    questtimer.cpp
+    questtimer.cpp \
+    artifact.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     magic.h \
     spellfactory.h \
     fightmanager.h \
-    questtimer.h
+    questtimer.h \
+    artifact.h
 
 FORMS    += mainwindow.ui \
     testform.ui \

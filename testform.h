@@ -21,7 +21,6 @@ public:
 
     void initCharacters();
     void initSpells();
-    QString fightStep();
 
 signals:
     void invokeAddPlayer(Character *c);

@@ -11,6 +11,7 @@ public:
     HybridStrike(Character *owner, int lvl);
 
     virtual Nuke::Result launch(const Character *receiver);
+    virtual void updateLvl(int lvl);
 protected:
     double damage;
 };

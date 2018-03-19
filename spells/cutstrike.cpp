@@ -5,6 +5,22 @@ CutStrike::CutStrike(Character *owner, int lvl)
     : Nuke(owner, lvl)
 {
     this->name = "CutStrike";
+    updateLvl(lvl);
+}
+
+Nuke::Result CutStrike::launch(const Character *receiver)
+{
+    Nuke::Result result;
+    if (!isReady())
+        return result;
+    result.isActive = true;
+    result.physDamage = damage + 80*owner->preparedInfo.spellDamage() + 0.5*owner->preparedInfo.damage;
+    return result;
+}
+
+void CutStrike::updateLvl(int lvl)
+{
+    this->lvl = lvl;
     this->title = "Рассечение " + QString::number(lvl) +"го уровня";
     switch (lvl)
     {
@@ -36,14 +52,4 @@ CutStrike::CutStrike(Character *owner, int lvl)
     default:
         break;
     }
-}
-
-Nuke::Result CutStrike::launch(const Character *receiver)
-{
-    Nuke::Result result;
-    if (!isReady())
-        return result;
-    result.isActive = true;
-    result.physDamage = damage + 80*owner->preparedInfo.spellDamage() + 0.5*owner->preparedInfo.damage;
-    return result;
 }

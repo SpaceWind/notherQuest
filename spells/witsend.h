@@ -12,6 +12,7 @@ public:
     WitsEndNuke(Character *owner, int lvl);
 
     virtual Nuke::Result launch(const Character *receiver);
+    virtual void updateLvl(int lvl);
 protected:
     double damage;
 };
@@ -23,6 +24,7 @@ public:
     WitsEndDebuff(Character *owner, int lvl);
 
     virtual void apply(Character *receiver);
+    virtual void updateLvl(int lvl);
 protected:
     double value;
 };
