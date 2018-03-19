@@ -1,10 +1,15 @@
 #include "fightmanager.h"
 #include "utils.h"
+#include <QThread>
+#include <QDebug>
+#include <QApplication>
 
-FightManager::FightManager(SpellFactory *sf, QObject *o)
+FightManager::FightManager(SpellFactory *sf, QuestTimer *q, QObject *o)
     : QObject(o)
 {
     this->sf = sf;
+    this->qt = q;
+    connect(this, SIGNAL(invokeStartQt(double)), qt, SLOT(start(double)));
 }
 
 void FightManager::startFight()
@@ -13,11 +18,13 @@ void FightManager::startFight()
         applyFightStart(playerTeam[i]);
     for (int i = 0; i < enemyTeam.count(); i++)
         applyFightStart(enemyTeam[i]);
-    emit message("БИТВА НАЧАЛАСЬ");
+    runMessage("БИТВА НАЧАЛАСЬ", 3.0);
+    turnNumber = 1;
 }
 
 void FightManager::startTurn()
 {
+    runMessage("Ход " + QString::number(turnNumber++), 2.0);
     updateInit();
     for (int i = 0; i < playerTeam.count(); i++)
         applyTurn(playerTeam[i]);
@@ -27,6 +34,11 @@ void FightManager::startTurn()
     FightCycleResult result;
     while (!result.done())
         result = runFightCycle();
+
+    if (result.ended())
+        emit fightEnded(result.playerWon);
+    else
+        emit nextTurn();
 }
 
 FightManager::FightCycleResult FightManager::runFightCycle()
@@ -44,7 +56,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
     Character *e = findEnemy(OFFENSIVE, isPlayerTurn);
     if (e == 0)
     {
-        emit message("Бой закончился. Победил " + c->name);
+        runMessage("Бой закончился. Победил " + c->name);
         result.playerWon = isPlayerTurn;
         result.enemyWon = !isPlayerTurn;
         return result;
@@ -63,7 +75,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
                     Nuke *s = sf->getNuke(sId);
                     if (s->manacost <= c->currentMana)
                     {
-                        emit message(c->name + " кастует " + s->title);
+                        runMessage(c->name + " кастует " + s->title, 10.0 * c->preparedInfo.castSpeed());
                         c->currentMana-= s->manacost;
                         if (s->selfCast)
                             applyNuke(c, s->id, s->launch(c), c);
@@ -78,7 +90,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
                     Buff *s = sf->getBuff(sId);
                     if (s->manacost <= c->currentMana)
                     {
-                        emit message(c->name + " кастует " + s->name);
+                        runMessage(c->name + " кастует " + s->name, 10.0 * c->preparedInfo.castSpeed());
                         c->currentMana-= s->manacost;
                         if (s->selfCast)
                             c->passives.buffs.append(sf->generic(sId));
@@ -93,7 +105,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
                     Launcher *s = sf->getLauncher(sId);
                     if (s->manacost <= c->currentMana)
                     {
-                        emit message (c->name + " кастует" + s->name);
+                        runMessage (c->name + " кастует" + s->name, 10.0 * c->preparedInfo.castSpeed());
                         c->currentMana -= s->manacost;
                         if (s->selfCast)
                             c->passives.launchers.append(sf->generic(sId));
@@ -122,7 +134,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
         }
         else
             msg = c->name + " промахнулся!";
-        message(msg);
+        runMessage(msg, StaticMethods::minmax(10.0 * c->preparedInfo.attackSpeed(),1.0, aa.missed ? 2.0 : 10.0));
 
 
         foreach (const int &id, c->passives.launchers)
@@ -184,9 +196,11 @@ Character *FightManager::pickNext()
 void FightManager::updateInit()
 {
     for (int i = 0; i < playerTeam.count(); i++)
-        playerTeam[i]->currentInit += playerTeam[i]->info.init;
+        if (playerTeam[i]->currentInit < 10.0)
+            playerTeam[i]->currentInit += playerTeam[i]->info.init;
     for (int i = 0; i < enemyTeam.count(); i++)
-        enemyTeam[i]->currentInit += enemyTeam[i]->info.init;
+        if (enemyTeam[i]->currentInit < 10.0)
+            enemyTeam[i]->currentInit += enemyTeam[i]->info.init;
 
 }
 
@@ -259,6 +273,22 @@ Character *FightManager::findById(int id)
     return 0;
 }
 
+void FightManager::awaitTimer()
+{
+    while (!qt->isReady())
+    {
+        this->thread()->msleep(250);
+    }
+}
+
+void FightManager::runMessage(QString s, double time)
+{
+    message(s);
+    invokeStartQt(time);
+    this->thread()->sleep(1);
+    awaitTimer();
+}
+
 void FightManager::applyFightStart(Character *c)
 {
     c->resetPrepared();
@@ -324,6 +354,9 @@ void FightManager::applyTurn(Character *c)
         sf->update(launcherId, 5.0);
     foreach (const int spId, c->actives.activeSpells)
         sf->update(spId, 5.0);
+    if (c->currentHP > 0.0)
+        c->currentHP = StaticMethods::minmax(c->currentHP + c->preparedInfo.hpr * 5.0, 0.0, c->preparedInfo.hp);
+    c->currentMana = StaticMethods::minmax(c->currentMana + c->preparedInfo.mpr * 5.0, 0.0, c->preparedInfo.mana);
 }
 
 void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Character *c)
@@ -345,14 +378,14 @@ void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Cha
         c->currentMana -= r.manaDamage;
         c->currentHP-= value;
         if (r.manaDamage > 0)
-            emit message("сжигает " + QString::number(r.manaDamage, 'f',2) + " маны");
+            runMessage("сжигает " + QString::number(r.manaDamage, 'f',2) + " маны", 3.0);
 
-        emit message("наносит " + QString::number(value, 'f', 2) + " урона");
+        runMessage("наносит " + QString::number(value, 'f', 2) + " урона", 3.0);
 
         if (c->currentMana < 0.) c->currentMana = 0.;
         if (c->currentHP < 0.) c->currentHP = 0.;
     }
-    sf->makeReady(spellId);
+    sf->resetCD(spellId);
 
     foreach (const int &sid, c->passives.launchers)
     {

@@ -57,6 +57,7 @@ struct StatsInfo
     double rc, sc, siq;
     double ms, eq;
     double init;
+    double as, cs;
 
     double crtChance()          { return crc / (crc+100.); }
     double crtDamage()          { return 1.25 + crd/100.; }
@@ -68,6 +69,9 @@ struct StatsInfo
     double specialItemChance()  { return 0.05 + siq/(siq + 200); }
     double armor()              { return arm / (arm + 100.); }
     double mres()               { return mr / (mr + 100.); }
+
+    double attackSpeed()        { return 1.0 - as / (as + 100.); }
+    double castSpeed()          { return 1.0 - cs / (cs + 100.); }
 
     double speciality();
     double offensiveness();

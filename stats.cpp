@@ -42,8 +42,8 @@ StatsInfo StatsInfo::buildInfo(Stats stats)
 
     StatsInfo info;
     info.damage = stats.strength * 4.5 + stats.agility *1.0;
-    info.crc = stats.agility * 2.5;
-    info.crd = stats.agility * 4.0 + stats.strength *1.0;
+    info.crc = stats.agility * 2.0;
+    info.crd = stats.agility * 3.0 + stats.strength *1.0;
     info.arm = stats.agility * 1.0 + stats.endurance * 3.5;
     info.mr = stats.endurance * 2.0 + stats.charisma *0.5 + stats.intellect *0.5;
     info.mana = stats.intellect * 10.0 + 50;
@@ -57,6 +57,8 @@ StatsInfo StatsInfo::buildInfo(Stats stats)
     info.ms = stats.speed * 8.0;
     info.eq = stats.speed * 1.5;
     info.init = stats.speed * 0.15 + 10.0;
+    info.as = stats.agility * 4.0 + stats.speed * 2.5;
+    info.cs = stats.intellect * 4.0 + stats.speed * 2.5;
 
     return info;
 }

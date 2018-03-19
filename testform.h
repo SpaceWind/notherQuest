@@ -5,6 +5,7 @@
 #include "stats.h"
 #include "utils.h"
 #include "fightmanager.h"
+#include "questtimer.h"
 
 namespace Ui {
 class TestForm;
@@ -22,10 +23,20 @@ public:
     void initSpells();
     QString fightStep();
 
+signals:
+    void invokeAddPlayer(Character *c);
+    void invokeAddEnemy(Character *c);
+    void invokeStartFight();
+    void invokeStartTurn();
+    void invokeClear();
+public slots:
+    void progress(double v);
+    void updateText(QString s);
+    void nextTurn();
+    void fightEnded(bool playerWon);
+
 private slots:
     void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
 
     void on_pushButton_3_clicked();
 
@@ -38,6 +49,7 @@ private:
     bool isFirst;
     SpellFactory *sf;
     FightManager *fightManager;
+    QuestTimer * questTimer;
 };
 
 #endif // TESTFORM_H

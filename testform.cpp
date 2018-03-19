@@ -1,6 +1,8 @@
 #include "testform.h"
 #include "ui_testform.h"
 #include "playerstats.h"
+#include <QThread>
+#include <QDebug>
 
 TestForm::TestForm(QWidget *parent) :
     QWidget(parent),
@@ -8,12 +10,31 @@ TestForm::TestForm(QWidget *parent) :
 {
     ui->setupUi(this);
     sf = new SpellFactory();
-    fightManager = new FightManager(sf, 0);
 
-    QObject::connect(fightManager, &FightManager::message, [this](QString msg){
-        ui->textEdit->append(msg);
-    });
+    QThread *t = new QThread();
+    QThread *fmt = new QThread();
+    QTimer * timer = new QTimer();
+    timer->moveToThread(t);
 
+    questTimer = new QuestTimer(timer);
+    questTimer->moveToThread(t);
+    t->start();
+
+    fightManager = new FightManager(sf, questTimer, 0);
+    fightManager->moveToThread(fmt);
+    fmt->start();
+
+    QObject::connect(fightManager, SIGNAL(message(QString)), this, SLOT(updateText(QString)));
+    QObject::connect(fightManager, SIGNAL(nextTurn()), this, SLOT(nextTurn()));
+    QObject::connect(fightManager, SIGNAL(fightEnded(bool)), this, SLOT(fightEnded(bool)));
+
+    QObject::connect(questTimer, SIGNAL(progress(double)), this, SLOT(progress(double)));
+
+    connect(this, SIGNAL(invokeAddEnemy(Character*)), fightManager, SLOT(addEnemy(Character*)));
+    connect(this, SIGNAL(invokeAddPlayer(Character*)), fightManager, SLOT(addPlayer(Character*)));
+    connect(this, SIGNAL(invokeClear()), fightManager, SLOT(clear()));
+    connect(this, SIGNAL(invokeStartFight()), fightManager, SLOT(startFight()));
+    connect(this, SIGNAL(invokeStartTurn()), fightManager, SLOT(startTurn()));
 }
 
 TestForm::~TestForm()
@@ -129,6 +150,37 @@ QString TestForm::fightStep()
     return message;
 }
 
+void TestForm::progress(double v)
+{
+    ui->quest_timer->setMaximum(1000);
+    ui->quest_timer->setValue(v*1000);
+}
+
+void TestForm::updateText(QString s)
+{
+    ui->textEdit->append(s);
+    ui->status_label->setText(s);
+
+    StaticMethods::animatePBProperty(ui->hpbar_1,cha.currentHP,1000);
+    StaticMethods::animatePBProperty(ui->hpbar_,chb.currentHP, 1000);
+}
+
+void TestForm::nextTurn()
+{
+    invokeStartTurn();
+}
+
+void TestForm::fightEnded(bool playerWon)
+{
+    if (playerWon)
+        ui->textEdit->append("победил " + cha.name);
+    else
+        ui->textEdit->append("победил " + chb.name);
+    invokeClear();
+    sf->makeReady(sf->findSpell("CutStrike", cha.id));
+    sf->makeReady(sf->findSpell("HybridStrike", chb.id));
+}
+
 void TestForm::on_pushButton_clicked()
 {
     initCharacters();
@@ -138,10 +190,12 @@ void TestForm::on_pushButton_clicked()
     ui->hpbar_->setValue(chb.currentHP);
     ui->textEdit->clear();
 
-    fightManager->addPlayer(&cha);
-    fightManager->addEnemy(&chb);
+    invokeAddPlayer(&cha);
+    invokeAddEnemy(&chb);
+    invokeStartFight();
 
-    fightManager->startFight();
+    invokeStartTurn();
+    /*
 
     while (cha.alive() && chb.alive())
         fightManager->startTurn();
@@ -150,13 +204,8 @@ void TestForm::on_pushButton_clicked()
     else
         ui->textEdit->append("победил " + chb.name);
     fightManager->clear();
-    sf->resetCD(sf->findSpell("CutStrike", cha.id));
-    sf->resetCD(sf->findSpell("HybridStrike", chb.id));
-}
-
-void TestForm::on_pushButton_2_clicked()
-{
-    ui->textEdit->append(fightStep());
+    sf->makeReady(sf->findSpell("CutStrike", cha.id));
+    sf->makeReady(sf->findSpell("HybridStrike", chb.id));*/
 }
 
 void TestForm::on_pushButton_3_clicked()

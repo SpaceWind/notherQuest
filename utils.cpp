@@ -1,6 +1,8 @@
 #include "utils.h"
 #include <QObject>
 #include <QDateTime>
+#include <QPropertyAnimation>
+#include <QEasingCurve>
 
 
 void StaticMethods::initRandom()
@@ -41,4 +43,14 @@ int StaticMethods::procItem(QVector<double> weights, int quality)
 double StaticMethods::minmax(double value, double min, double max)
 {
     return std::min(std::max(value, min), max);
+}
+
+void StaticMethods::animatePBProperty(QProgressBar *pb, int endValue, int time)
+{
+    QPropertyAnimation *a = new QPropertyAnimation(pb, "value");
+    a->setStartValue(pb->value());
+    a->setEndValue(endValue);
+    a->setDuration(time);
+    a->setEasingCurve(QEasingCurve::OutElastic);
+    a->start(QAbstractAnimation::DeleteWhenStopped);
 }

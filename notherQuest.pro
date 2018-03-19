@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     enemystatusitem.cpp \
     magic.cpp \
     spellfactory.cpp \
-    fightmanager.cpp
+    fightmanager.cpp \
+    questtimer.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     enemystatusitem.h \
     magic.h \
     spellfactory.h \
-    fightmanager.h
+    fightmanager.h \
+    questtimer.h
 
 FORMS    += mainwindow.ui \
     testform.ui \

@@ -41,4 +41,5 @@ void PlayerStats::render()
     ui->hpr->setText(QString::number(info.hpr, 'f', 2));
     ui->mpr->setText(QString::number(info.mpr, 'f', 2));
     ui->spec->setText(QString::number(info.speciality(), 'f', 2));
+    ui->init->setText(QString::number(info.init, 'f', 2));
 }
