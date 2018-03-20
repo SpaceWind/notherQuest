@@ -60,7 +60,7 @@ struct StatsInfo
     double as, cs;
 
     double crtChance()          { return crc / (crc+100.); }
-    double crtDamage()          { return 1.25 + crd/100.; }
+    double crtDamage()          { return 1.15 + crd/100.; }
     double spellDamage()        { return 1.0 + sd/100.; }
     double evasion()            { return eq / (eq+100.); }
     double rewardCoef()         { return 1.0 + rc/100.; }
