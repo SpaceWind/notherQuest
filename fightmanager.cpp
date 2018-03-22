@@ -62,7 +62,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
         return result;
     }
 
-    bool wantsToCastSpell = StaticMethods::procChance(1.0 - c->preparedInfo.speciality());
+    bool wantsToCastSpell = SM::procChance(1.0 - c->preparedInfo.speciality());
     bool wasCasted = false;
     if (wantsToCastSpell)
     {
@@ -134,7 +134,7 @@ FightManager::FightCycleResult FightManager::runFightCycle()
         }
         else
             msg = c->name + " промахнулся!";
-        runMessage(msg, StaticMethods::minmax(10.0 * c->preparedInfo.attackSpeed(),1.0, aa.missed ? 2.0 : 10.0));
+        runMessage(msg, SM::minmax(10.0 * c->preparedInfo.attackSpeed(),1.0, aa.missed ? 2.0 : 10.0));
 
 
         foreach (const int &id, c->passives.launchers)
@@ -235,7 +235,7 @@ Character *FightManager::findEnemy(FightManager::CharSearchRule rule, bool isFin
         QVector<double> weights;
         for (int i = 0; i < list.count(); i++)
             weights.append(list[i]->info.offensiveness());
-        auto c = list[StaticMethods::procItem(weights)];
+        auto c = list[SM::procItem(weights)];
         if (!c->alive())
             return findEnemy(RANDOM, isFindEnemy);
         return c;
@@ -355,8 +355,8 @@ void FightManager::applyTurn(Character *c)
     foreach (const int spId, c->actives.activeSpells)
         sf->update(spId, 5.0);
     if (c->currentHP > 0.0)
-        c->currentHP = StaticMethods::minmax(c->currentHP + c->preparedInfo.hpr * 5.0, 0.0, c->preparedInfo.hp);
-    c->currentMana = StaticMethods::minmax(c->currentMana + c->preparedInfo.mpr * 5.0, 0.0, c->preparedInfo.mana);
+        c->currentHP = SM::minmax(c->currentHP + c->preparedInfo.hpr * 5.0, 0.0, c->preparedInfo.hp);
+    c->currentMana = SM::minmax(c->currentMana + c->preparedInfo.mpr * 5.0, 0.0, c->preparedInfo.mana);
 }
 
 void FightManager::applyNuke(Character *sender, int spellId, Nuke::Result r, Character *c)

@@ -24,7 +24,7 @@ WeaponPostfixDeath::WeaponPostfixDeath(SpellFactory *sf, Character *c, int lvl, 
 
 void WeaponPostfixDeath::init()
 {
-    this->spells.append(sf->createSpell("WeaponDeathPostfix", owner, lvl));
+    this->spells.append(sf->createSpell("WeaponDeathPostfixSpell", owner, lvl));
     owner->passives.launchers.append(this->spells.last());
 }
 

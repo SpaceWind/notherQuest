@@ -117,8 +117,8 @@ void TestForm::updateText(QString s)
     ui->textEdit->append(s);
     ui->status_label->setText(s);
 
-    StaticMethods::animatePBProperty(ui->hpbar_1,cha.currentHP,1000);
-    StaticMethods::animatePBProperty(ui->hpbar_,chb.currentHP, 1000);
+    SM::animatePBProperty(ui->hpbar_1,cha.currentHP,1000);
+    SM::animatePBProperty(ui->hpbar_,chb.currentHP, 1000);
 }
 
 void TestForm::nextTurn()

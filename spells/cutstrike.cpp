@@ -1,4 +1,5 @@
 #include "cutstrike.h"
+#include <QVector>
 
 // SPELLS
 CutStrike::CutStrike(Character *owner, int lvl)
@@ -22,34 +23,8 @@ void CutStrike::updateLvl(int lvl)
 {
     this->lvl = lvl;
     this->title = "Рассечение " + QString::number(lvl) +"го уровня";
-    switch (lvl)
-    {
-    case 1:
-        cd = 6;
-        manacost = 5;
-        damage = 30;
-        break;
-    case 2:
-        cd = 5;
-        manacost = 10;
-        damage = 60;
-        break;
-    case 3:
-        cd = 4;
-        manacost = 15;
-        damage = 90;
-        break;
-    case 4:
-        cd = 3;
-        manacost = 25;
-        damage = 120;
-        break;
-    case 5:
-        cd = 2;
-        manacost = 40;
-        damage = 150;
-        break;
-    default:
-        break;
-    }
+
+    cd = (QVector<int>() << 6 << 5 << 4 << 3 << 2) [lvl-1];
+    manacost = (QVector<int>() << 5 << 10 << 15 << 25 << 40) [lvl-1];
+    damage = (QVector<int>() << 30 << 60 << 90 << 120 << 150) [lvl-1];
 }

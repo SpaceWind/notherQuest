@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     artifact.cpp \
     artifactfabric.cpp \
     stashitem.cpp \
-    globalinfo.cpp
+    globalinfo.cpp \
+    monster.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     artifact.h \
     artifactfabric.h \
     stashitem.h \
-    globalinfo.h
+    globalinfo.h \
+    monster.h
 
 FORMS    += mainwindow.ui \
     testform.ui \

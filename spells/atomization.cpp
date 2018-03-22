@@ -1,4 +1,5 @@
 #include "atomization.h"
+#include <QVector>
 
 Atomization::Atomization(Character *owner, int lvl)
     : Nuke(owner, lvl)

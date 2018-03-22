@@ -22,7 +22,7 @@ Stats::Stats()
 
 Stats Stats::build()
 {
-    Stats stats = *this;;
+    Stats stats = *this;
     if (this->isBuilt)
         return stats;
 
@@ -71,7 +71,7 @@ double StatsInfo::speciality()
     nS = (arm * 222. + mr * 333. + (hp - 100.)*42. + (hpr - 0.5) * 10000. + eq*666. + init * 6666.)*0.66;
 
     double normalV = (pS + nS)/(pS + nS + mS + nS);
-    return StaticMethods::minmax(2*normalV - 0.5, 0.1, 0.9);
+    return SM::minmax(2*normalV - 0.5, 0.1, 0.9);
 }
 
 double StatsInfo::offensiveness()
@@ -107,7 +107,7 @@ AutoAttack AutoAttack::makeAutoAttack(Character &a, Character &d)
     AutoAttack result;
     result.damage = a.preparedInfo.damage;
 
-    if (StaticMethods::procChance(a.preparedInfo.crtChance()))
+    if (SM::procChance(a.preparedInfo.crtChance()))
     {
         result.damage *= a.preparedInfo.crtDamage();
         result.isCrit = true;
@@ -118,7 +118,7 @@ AutoAttack AutoAttack::makeAutoAttack(Character &a, Character &d)
                     d.preparedInfo.armor() : d.preparedInfo.mres();
     result.damage *= 1.0 - resist;
 
-    if (StaticMethods::procChance(d.preparedInfo.evasion() * (1.0 - a.preparedInfo.evasion()/2.0)))
+    if (SM::procChance(d.preparedInfo.evasion() * (1.0 - a.preparedInfo.evasion()/2.0)))
     {
         result.missed = true;
         result.isDefenderDead = false;

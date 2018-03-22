@@ -5,19 +5,19 @@
 #include <QEasingCurve>
 
 
-void StaticMethods::initRandom()
+void SM::initRandom()
 {
     QDateTime dt = QDateTime::currentDateTime();
     qsrand(dt.currentSecsSinceEpoch());
 }
 
-bool StaticMethods::procChance(float chance, int quality)
+bool SM::procChance(float chance, int quality)
 {
     int procInt = chance*quality;
     return qrand()%quality < procInt;
 }
 
-int StaticMethods::procItem(QVector<double> weights, int quality)
+int SM::procItem(QVector<double> weights, int quality)
 {
     int result = 0;
     double totalWeight = 0;
@@ -40,12 +40,12 @@ int StaticMethods::procItem(QVector<double> weights, int quality)
     return result;
 }
 
-double StaticMethods::minmax(double value, double min, double max)
+double SM::minmax(double value, double min, double max)
 {
     return std::min(std::max(value, min), max);
 }
 
-void StaticMethods::animatePBProperty(QProgressBar *pb, int endValue, int time)
+void SM::animatePBProperty(QProgressBar *pb, int endValue, int time)
 {
     QPropertyAnimation *a = new QPropertyAnimation(pb, "value");
     a->setStartValue(pb->value());
@@ -53,4 +53,26 @@ void StaticMethods::animatePBProperty(QProgressBar *pb, int endValue, int time)
     a->setDuration(time);
     a->setEasingCurve(QEasingCurve::OutElastic);
     a->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+double SM::pickItem(const QVector<int> &options, const QVector<double> &values, int item)
+{
+    int index = options.indexOf(item);
+    if (index >= 0 && index < values.count())
+        return values[index];
+    if (values.count())
+        return values.first();
+    else
+        return 0.0;
+}
+
+QString SM::pickItem(const QVector<int> &options, const QVector<QString> &values, int item)
+{
+    int index = options.indexOf(item);
+    if (index >= 0 && index < values.count())
+        return values[index];
+    if (values.count())
+        return values.first();
+    else
+        return "";
 }

@@ -99,17 +99,17 @@ Artefact *ArtifactFabric::generate(bool isSpecial, int minLvl, int maxLvl, Chara
         return base;
 
     bool needPrefix = false, needPostfix = false, uniqueInstead = false;
-    if (StaticMethods::procChance(0.7))
+    if (SM::procChance(0.7))
         needPrefix = true;
     else
         needPostfix = true;
 
-    if (needPrefix && StaticMethods::procChance(0.07))
+    if (needPrefix && SM::procChance(0.07))
         needPostfix = true;
-    else if (needPostfix && StaticMethods::procChance(0.3))
+    else if (needPostfix && SM::procChance(0.3))
         needPostfix = true;
 
-    if (needPrefix && needPostfix && StaticMethods::procChance(0.1))
+    if (needPrefix && needPostfix && SM::procChance(0.1))
         uniqueInstead = true;
 
     if (uniqueInstead)

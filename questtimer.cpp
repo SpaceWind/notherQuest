@@ -26,7 +26,7 @@ void QuestTimer::start(double time, bool animation)
 void QuestTimer::update()
 {
     double v = double(elapsed.elapsed())/1000. / time;
-    emit progress(noAnimation ? 1.0 : StaticMethods::minmax(v));
+    emit progress(noAnimation ? 1.0 : SM::minmax(v));
     if (v >= 1.0)
         timer->stop();
 }
