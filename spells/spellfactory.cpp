@@ -10,6 +10,8 @@ SpellFactory::SpellFactory()
     types["WitsEnd"] = SPELL_TYPE_COMPLEX;
     types["WitsEndNuke"] = SPELL_TYPE_NUKE;
     types["WitsEndDebuff"] = SPELL_TYPE_BUFF;
+    types["Desintegration"] = SPELL_TYPE_NUKE;
+    types["WeaponDeathPostfixSpell"] = SPELL_TYPE_LAUNCHER;
     currentID = 10;
 }
 
@@ -34,6 +36,10 @@ int SpellFactory::createSpell(QString name, Character *c, int lvl)
         return bindSpell(new WitsEndNuke(c, lvl));
     if (name == "WitsEndDebuff")
         return bindSpell(new WitsEndDebuff(c, lvl));
+    if (name == "WeaponDeathPostfixSpell")
+        return bindSpell(new WeaponPostfixDeathSpell(c,lvl));
+    if (name == "Desintegration")
+        return bindSpell(new Desintegration(c, lvl));
 
     return 0;
 }
