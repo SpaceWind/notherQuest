@@ -23,12 +23,7 @@ SOURCES += main.cpp\
     testform.cpp \
     playerstats.cpp \
     enemystatusitem.cpp \
-    magic.cpp \
-    spellfactory.cpp \
     fightmanager.cpp \
-    questtimer.cpp \
-    artifact.cpp \
-    artifactfabric.cpp \
     stashitem.cpp \
     globalinfo.cpp \
     monster.cpp
@@ -39,12 +34,7 @@ HEADERS  += mainwindow.h \
     testform.h \
     playerstats.h \
     enemystatusitem.h \
-    magic.h \
-    spellfactory.h \
     fightmanager.h \
-    questtimer.h \
-    artifact.h \
-    artifactfabric.h \
     stashitem.h \
     globalinfo.h \
     monster.h

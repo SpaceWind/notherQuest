@@ -1,14 +1,18 @@
 HEADERS += \
-    $$PWD/cutstrike.h \
-    $$PWD/hybridstrike.h \
-    $$PWD/witsend.h \
-    $$PWD/atomization.h \
     $$PWD/allspells.h \
-    $$PWD/weaponpostfixdeath.h
+    $$PWD/nukes.h \
+    $$PWD/launchers.h \
+    $$PWD/buffs.h \
+    $$PWD/items.h \
+    $$PWD/spellfactory.h \
+    $$PWD/artefacts.h \
+    $$PWD/magic.h
 
 SOURCES += \
-    $$PWD/cutstrike.cpp \
-    $$PWD/hybridstrike.cpp \
-    $$PWD/witsend.cpp \
-    $$PWD/atomization.cpp \
-    $$PWD/weaponpostfixdeath.cpp
+    $$PWD/nukes.cpp \
+    $$PWD/launchers.cpp \
+    $$PWD/buffs.cpp \
+    $$PWD/items.cpp \
+    $$PWD/spellfactory.cpp \
+    $$PWD/artefacts.cpp \
+    $$PWD/magic.cpp

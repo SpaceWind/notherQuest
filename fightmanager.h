@@ -1,12 +1,12 @@
 #ifndef FIGHTMANAGER_H
 #define FIGHTMANAGER_H
 
-#include "spellfactory.h"
+#include "spells/spellfactory.h"
 #include "stats.h"
 #include <QList>
 #include <QObject>
 #include <QHash>
-#include "questtimer.h"
+#include "utils.h"
 
 class FightManager : public QObject
 {

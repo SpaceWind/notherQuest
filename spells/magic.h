@@ -1,6 +1,5 @@
 #ifndef MAGIC_H
 #define MAGIC_H
-
 #include <QObject>
 #include "stats.h"
 
@@ -9,6 +8,7 @@
 #define SPELL_TYPE_LAUNCHER QString("L")
 #define SPELL_TYPE_AUGMENTATION QString("A")
 #define SPELL_TYPE_COMPLEX QString("C")
+#define LVLI(a,b,c,d,e) (QVector<int>()<<a<<b<<c<<d<<e)[lvl-1]
 
 namespace Magic {
 
@@ -120,4 +120,5 @@ protected:
 };
 
 }
+
 #endif // MAGIC_H

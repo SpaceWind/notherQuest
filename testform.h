@@ -3,9 +3,7 @@
 
 #include <QWidget>
 #include "stats.h"
-#include "utils.h"
 #include "fightmanager.h"
-#include "questtimer.h"
 
 namespace Ui {
 class TestForm;

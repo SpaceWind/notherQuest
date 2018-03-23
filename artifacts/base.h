@@ -2,7 +2,7 @@
 #define BADSTICK_H
 
 #include <QObject>
-#include <artifact.h>
+#include "artefact.h"
 
 class BadStick : public Artefact
 {

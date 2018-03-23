@@ -1,7 +1,7 @@
-#ifndef SPELLFACTORY_H
-#define SPELLFACTORY_H
+#ifndef SPELLFABRIC_H
+#define SPELLFABRIC_H
 
-#include "spells/allspells.h"
+#include "allspells.h"
 #include <QHash>
 
 class SpellFactory
@@ -40,4 +40,5 @@ private:
     int currentID;
 };
 
-#endif // SPELLFACTORY_H
+
+#endif // SPELLFABRIC_H

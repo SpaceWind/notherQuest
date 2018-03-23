@@ -1,4 +1,4 @@
-#include "artifact.h"
+#include "artefact.h"
 
 Artefact::Artefact()
 {

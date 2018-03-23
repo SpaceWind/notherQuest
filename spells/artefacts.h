@@ -1,6 +1,6 @@
-#ifndef WEAPONDEATHPOSTFIX_H
-#define WEAPONDEATHPOSTFIX_H
-#include <magic.h>
+#ifndef ARTIFACTS_H
+#define ARTIFACTS_H
+#include "magic.h"
 using namespace Magic;
 
 class WeaponPostfixDeathSpell :public Launcher
@@ -12,4 +12,5 @@ public:
     virtual Result beforeAttack(AutoAttack &aa, Character *receiver);
 };
 
-#endif // WEAPONDEATHPOSTFIX_H
+
+#endif // ARTIFACTS_H

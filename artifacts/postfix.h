@@ -1,8 +1,8 @@
 #ifndef WEAPONPOSTFIXDEATH_H
 #define WEAPONPOSTFIXDEATH_H
-#include <artifact.h>
+#include "artefact.h"
 
-class WeaponPostfixDeath :public Artefact
+class WeaponPostfixDeath : public Artefact
 {
 public:
     WeaponPostfixDeath();

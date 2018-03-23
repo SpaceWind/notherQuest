@@ -1,7 +1,7 @@
-#ifndef ARTIFACT_H
-#define ARTIFACT_H
+#ifndef ARTEFACT_H
+#define ARTEFACT_H
 #include "stats.h"
-#include "spellfactory.h"
+#include "spells/spellfactory.h"
 #include <QList>
 
 class Artefact
@@ -44,4 +44,4 @@ protected:
     Type type;
 };
 
-#endif // ARTIFACT_H
+#endif // ARTEFACT_H

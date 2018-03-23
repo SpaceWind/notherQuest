@@ -1,10 +1,10 @@
 #ifndef ALLSPELLS_H
 #define ALLSPELLS_H
 
-#include "atomization.h"
-#include "cutstrike.h"
-#include "hybridstrike.h"
-#include "witsend.h"
-#include "weaponpostfixdeath.h"
+#include "nukes.h"
+#include "launchers.h"
+#include "buffs.h"
+#include "artefacts.h"
+#include "items.h"
 
 #endif // ALLSPELLS_H

@@ -1,14 +1,14 @@
-#ifndef ARTIFACTFABRIC_H
-#define ARTIFACTFABRIC_H
+#ifndef ARTEFACTFABRIC_H
+#define ARTEFACTFABRIC_H
 
-#include "artifacts/all.h"
+#include "all.h"
 #include <QHash>
 
 
-class ArtifactFabric
+class ArtefactFabric
 {
 public:
-    ArtifactFabric(SpellFactory *sf);
+    ArtefactFabric(SpellFactory *sf);
 
     void init();
 
@@ -48,4 +48,5 @@ protected:
     int currentId;
 };
 
-#endif // ARTIFACTFABRIC_H
+
+#endif // ARTEFACTFABRIC_H

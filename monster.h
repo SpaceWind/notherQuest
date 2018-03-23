@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "stats.h"
-#include "spellfactory.h"
+#include "spells/spellfactory.h"
 
 
 class Monster

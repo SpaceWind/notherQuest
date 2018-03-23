@@ -3,6 +3,8 @@
 
 #include <QVector>
 #include <QProgressBar>
+#include <QElapsedTimer>
+#include <QTimer>
 
 
 class SM
@@ -16,6 +18,30 @@ public:
     static double pickItem(const QVector<int> &options, const QVector<double> &values, int item);
     static QString pickItem(const QVector<int> &options, const QVector<QString> &values, int item);
 };
+
+class QuestTimer : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QuestTimer(QTimer * t, QObject *parent = 0);
+    ~QuestTimer(){}
+
+signals:
+    void progress(double percent);
+
+public slots:
+    bool isReady();
+    void start(double time = 5.0, bool animation = true);
+
+    void update();
+
+private:
+    QElapsedTimer elapsed;
+    QTimer *timer;
+    double time;
+    bool noAnimation;
+};
+
 
 
 #endif // UTILS_H

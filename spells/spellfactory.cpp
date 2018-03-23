@@ -1,6 +1,7 @@
 #include "spellfactory.h"
 #include <QDebug>
 
+
 SpellFactory::SpellFactory()
 {
     types["CutStrike"] = SPELL_TYPE_NUKE;
