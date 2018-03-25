@@ -15,7 +15,7 @@ public:
     struct ArtifactLvl
     {
         ArtifactLvl() { min = max = 0; }
-        ArtifactLvl(int minLvl, int maxLvl) { min = minLvl, max = maxLvl; }
+        ArtifactLvl(int minLvl, int maxLvl = 9999) { min = minLvl, max = maxLvl; }
         ~ArtifactLvl(){}
         bool check(int lvl) { return lvl >= min && lvl <= max; }
         int min, max;
