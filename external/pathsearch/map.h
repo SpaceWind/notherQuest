@@ -17,6 +17,7 @@ public:
     Map();
 
     void init(int size);
+    void initFromImage(QString name);
     void updateNode(int left, int top, int value);
 
     inline index(int left, int top) { return left * count + top; }

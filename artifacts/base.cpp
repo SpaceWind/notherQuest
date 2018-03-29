@@ -682,7 +682,7 @@ SuperRazor::SuperRazor()
     slot = WEAPON;
     type = BASE;
     rarity = COMMON;
-    name = "EnforcedSpear";
+    name = "SuperRazor";
     title = "Супер бритва";
 }
 
@@ -693,7 +693,7 @@ SuperRazor::SuperRazor(SpellFactory *sf, Character *c, int lvl, int id)
     type = BASE;
     rarity = COMMON;
     price = 210 + 8.0*lvl;
-    name = "EnforcedSpear";
+    name = "SuperRazor";
     title = "Супер бритва";
 }
 

@@ -1,4 +1,6 @@
 #include "map.h"
+#include <QImage>
+#include <QFile>
 
 #include <QDebug>
 Map::Map()
@@ -18,13 +20,36 @@ void Map::init(int size)
         for (int j = 0; j <size; j++)
         {
             int value;
-            if (qrand()%10 == 0 || (i < 16 && j < 16))
+            if (qrand()%100 >= 50 || (i < 16 && j < 16))
                 value = qrand()%16 + 1;
             else
                 value = 0;
             nodes[i*size +j] = Node(value);
         }
     }
+}
+
+void Map::initFromImage(QString name)
+{
+    QFile f(name);
+    f.open(QFile::ReadOnly);
+    QImage img = QImage::fromData(f.readAll(),"PNG");
+
+    count = img.width();
+
+
+    if (nodes) delete[] nodes;
+    nodes = new Node[count*count];
+
+    for (int i = 0; i < count; i++)
+    {
+        for (int j = 0; j <count; j++)
+        {
+            int value = img.pixel(i,j) == qRgb(0,0,0) ? qrand()%16 + 1 : 0;
+            nodes[i*count +j] = Node(value);
+        }
+    }
+    f.close();
 }
 
 void Map::updateNode(int left, int top, int value)
