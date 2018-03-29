@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     fightmanager.cpp \
     stashitem.cpp \
     globalinfo.cpp \
-    monster.cpp
+    monster.cpp \
+    map.cpp
 
 HEADERS  += mainwindow.h \
     stats.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     fightmanager.h \
     stashitem.h \
     globalinfo.h \
-    monster.h
+    monster.h \
+    map.h
 
 FORMS    += mainwindow.ui \
     testform.ui \
