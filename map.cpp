@@ -73,7 +73,7 @@ void Region::loadFromImage(QString filename)
             }
 
             int blue = qBlue(color);
-            entries[index].length = blue;
+            entries[index].length = (255-blue)*entries[index].roadCoef;
             entries[index].value = 0;
             entries[index].left = i;
             entries[index].top = j;
@@ -136,7 +136,7 @@ QVector<QPoint> Region::findWay(int startLeft, int startTop, int endLeft, int en
     QVector<QPoint> result;
     result.append(QPoint(currentLeft, currentTop));
     bool fail = false;
-    while (currentLeft != startLeft && currentTop != startTop)
+    while (currentLeft != startLeft || currentTop != startTop)
     {
         int needValue = entries[indexV(currentLeft, currentTop, width)].value - entries[indexV(currentLeft, currentTop, width)].length;
 

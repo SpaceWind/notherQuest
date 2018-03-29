@@ -3,6 +3,8 @@
 #include "playerstats.h"
 #include <QThread>
 #include <QDebug>
+#include "map.h"
+#include <QFileDialog>
 
 TestForm::TestForm(QWidget *parent) :
     QWidget(parent),
@@ -162,4 +164,18 @@ void TestForm::on_pushButton_4_clicked()
 {
     PlayerStats *p = new PlayerStats(chb.info);
     p->show();
+}
+
+void TestForm::on_pushButton_2_clicked()
+{
+    QString name = QFileDialog::getOpenFileName();
+    Region r;
+    r.loadFromImage(name);
+    r.saveToData("E:/map.dat");
+    auto v =  r.findBuilding(Region::mapEntry::CHURCH, 30, 69, 2000);
+    qDebug() << v << r.entries[r.indexV(v[0].x(), v[0].y(), r.width)].value << " " <<
+                     r.entries[r.indexV(v[1].x(), v[1].y(), r.width)].value;
+
+    qDebug() << r.findWay(30, 69, 32, 72);
+    //qDebug() << r.findBuilding(Region::mapEntry::TAVERN);
 }
